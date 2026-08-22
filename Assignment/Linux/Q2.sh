@@ -1,25 +1,19 @@
-brew install nginx 
+#!/bin/bash
 
-brew services start nginx 
+brew install nginx
 
-cd /opt/homebrew/var/www 
+brew services start nginx
 
-cat > index.html <<EOF 
+cd /opt/homebrew/var/www || exit 1
 
-<!DOCTYPE html> 
-
-<html> 
-
-<body> 
-
-<h1>Welcome to My NGINX Server</h1> 
-
-<p>Hosted on macOS</p> 
-
-</body> 
-
-</html> 
-
-EOF 
-
+cat > index.html <<EOF
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Welcome to My NGINX Server</h1>
+<p>Hosted on macOS</p>
+</body>
+</html>
+EOF
 brew services restart nginx
+curl localhost:8080

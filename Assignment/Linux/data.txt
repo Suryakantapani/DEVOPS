@@ -1,0 +1,4 @@
+Hello Linux World
+This is a sample file
+Welcome to Shell Scripting
+Nginx is a web server

@@ -1,1 +1,1 @@
-cut -c1-10 filename.txt
+cut -c1-10 data.txt

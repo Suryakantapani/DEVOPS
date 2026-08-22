@@ -1,7 +1,7 @@
 #!/bin/bash
 empty=0
 total=0
-for file in *.txt
+for file in AWS
 do
     lines=$(cat "$file" | wc -l)
     echo "File: $file"

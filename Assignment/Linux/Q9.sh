@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [ -f data.txt ]
 then
     echo "data.txt exists"

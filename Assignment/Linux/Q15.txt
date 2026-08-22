@@ -1,0 +1,5 @@
+Server IP is 192.168.1.10
+Hello Linux
+My IP is 10.0.0.5
+Welcome to Nginx
+The server is running at 172.16.0.1

@@ -1,1 +1,1 @@
-grep '^a' filename.txt
+grep '^a' xyz.txt
