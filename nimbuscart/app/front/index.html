@@ -1,0 +1,2698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NimbusCart</title>
+<style>
+:root {
+    --bg:#f5f7fb;
+    --sidebar:#fff;
+    --card:#fff;
+    --text:#151923;
+    --muted:#737b8c;
+    --border:#e8ebf2;
+    --input:#f8f9fc;
+    --primary:#6757e8;
+    --primary-hover:#5747d7;
+    --success:#19a463;
+    --warning:#e69b18;
+    --danger:#e5484d;
+    --shadow:0 10px 35px rgba(30,35,55,.07);
+    --radius:18px;
+}
+[data-theme="dark"] {
+    --bg:#0d1117;
+    --sidebar:#11161e;
+    --card:#151b24;
+    --text:#f2f4f8;
+    --muted:#8d96a7;
+    --border:#252d39;
+    --input:#10151c;
+    --primary:#8274ff;
+    --primary-hover:#9387ff;
+    --success:#2bc77b;
+    --warning:#f0ad2c;
+    --danger:#ff646a;
+    --shadow:0 15px 40px rgba(0,0,0,.25);
+}
+* {
+   box-sizing:border-box;
+}
+html {
+    scroll-behavior:smooth;
+}
+body {
+    margin:0;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:.25s;
+}
+button,input,select {
+    font-family:inherit;
+}
+button {
+    cursor:pointer;
+}
+.app {
+    display:flex;
+    min-height:100vh;
+}
+.sidebar {
+    width:250px;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    padding:22px 16px;
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    z-index:50;
+    transition:.25s;
+}
+.brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:5px 10px 30px;
+}
+.brand-logo {
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:13px;
+    background:linear-gradient(135deg,#6958eb,#8c7dff);
+    color:white;
+    font-size:19px;
+    font-weight:800;
+}
+.brand-name {
+    font-size:19px;
+    font-weight:800;
+}
+.brand-sub {
+    font-size:11px;
+    color:var(--muted);
+    margin-top:2px;
+}
+.nav-title {
+    color:var(--muted);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    padding:0 12px;
+    margin:8px 0;
+}
+.nav-item {
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:12px;
+    border-radius:11px;
+    margin-bottom:4px;
+    text-align:left;
+    transition:.2s;
+}
+.nav-item:hover {
+    background:var(--input);
+    color:var(--text);
+}
+.nav-item.active {
+    background:rgba(103,87,232,.12);
+    color:var(--primary);
+    font-weight:600;
+}
+.nav-icon {
+    width:20px;
+    text-align:center;
+    font-size:17px;
+}
+.sidebar-bottom {
+    position:absolute;
+    bottom:20px;
+    left:16px;
+    right:16px;
+}
+.connection {
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    color:var(--muted);
+}
+.online {
+    width:8px;
+    height:8px;
+    background:var(--success);
+    border-radius:50%;
+}
+.main {
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
+}
+
+.topbar {
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 32px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+.page-title h1 {
+    margin:0;
+    font-size:20px;
+}
+.page-title p {
+    margin:3px 0 0;
+    color:var(--muted);
+    font-size:12px;
+}
+.top-actions {
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+.icon-btn {
+    width:39px;
+    height:39px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:10px;
+    font-size:16px;
+}
+.icon-btn:hover {
+    border-color:var(--primary);
+    color:var(--primary);
+}
+.primary-btn {
+    border:0;
+    background:linear-gradient(135deg,var(--primary),#8174ef);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:600;
+}
+.danger-btn {
+    border:0;
+    background:rgba(229,72,77,.1);
+    color:var(--danger);
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:600;
+}
+.danger-btn:hover {
+    background:var(--danger);
+    color:white;
+}
+.content {
+    padding:30px;
+    max-width:1500px;
+    margin:auto;
+}
+.welcome {
+    border-radius:22px;
+    padding:30px;
+    color:white;
+    background:
+        radial-gradient(circle at 85% 20%,rgba(255,255,255,.16),transparent 28%),
+        linear-gradient(120deg,#161a30,#332d6e);
+    margin-bottom:25px;
+}
+.welcome-badge {
+    display:inline-flex;
+    margin-bottom:15px;
+    padding:6px 10px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    font-size:11px;
+}
+.welcome h2 {
+    margin:0 0 7px;
+    font-size:27px;
+}
+.welcome p {
+    margin:0;
+    color:#c6c8d9;
+    font-size:13px;
+}
+.stats {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+    margin-bottom:25px;
+}
+
+.stat-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.stat-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-label {
+    font-size:12px;
+    color:var(--muted);
+}
+
+.stat-icon {
+    width:38px;
+    height:38px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(103,87,232,.1);
+    color:var(--primary);
+}
+.stat-value {
+    font-size:24px;
+    font-weight:750;
+    margin-top:14px;
+}
+.stat-change {
+    font-size:11px;
+    color:var(--success);
+    margin-top:5px;
+}
+.panel {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-bottom:25px;
+    overflow:hidden;
+}
+.panel-header {
+    padding:20px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+.panel-header h3 {
+    margin:0;
+    font-size:16px;
+}
+.panel-header span {
+    color:var(--muted);
+    font-size:12px;
+}
+.form-area {
+    padding:20px 22px;
+    display:grid;
+    grid-template-columns:1.5fr 1fr 1fr auto;
+    gap:12px;
+}
+.field input {
+    width:100%;
+    background:var(--input);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:12px 14px;
+    border-radius:10px;
+    outline:none;
+}
+.field input:focus {
+    border-color:var(--primary);
+}
+.product-analysis {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+    margin-bottom:25px;
+}
+.analysis-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+.analysis-label {
+    color:var(--muted);
+    font-size:12px;
+}
+.analysis-title {
+    font-size:17px;
+    font-weight:700;
+    margin-top:12px;
+}
+.analysis-value {
+    font-size:22px;
+    font-weight:800;
+    margin-top:8px;
+}
+.analysis-meta {
+    font-size:11px;
+    color:var(--muted);
+    margin-top:6px;
+}
+.toolbar {
+    padding:15px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    border-bottom:1px solid var(--border);
+}
+.search {
+    position:relative;
+    flex:1;
+    max-width:420px;
+}
+.search input {
+    width:100%;
+    padding:11px 40px 11px 38px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--input);
+    color:var(--text);
+    outline:none;
+}
+.search-icon {
+    position:absolute;
+    left:13px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+}
+.filters {
+    display:flex;
+    gap:8px;
+}
+select {
+    padding:10px 12px;
+    background:var(--input);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+}
+.table-wrap {
+    overflow-x:auto;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+
+th {
+    padding:14px 22px;
+    text-align:left;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+    color:var(--muted);
+    background:var(--input);
+}
+
+td {
+    padding:16px 22px;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+.product-cell {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.product-avatar {
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(103,87,232,.12);
+    color:var(--primary);
+    font-weight:700;
+}
+
+.product-title {
+    font-weight:650;
+}
+
+.product-id {
+    font-size:10px;
+    color:var(--muted);
+    margin-top:2px;
+}
+
+.price {
+    font-weight:650;
+}
+
+.stock-badge {
+    display:inline-flex;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:650;
+}
+
+.stock-good {
+    color:var(--success);
+    background:rgba(25,164,99,.1);
+}
+
+.stock-low {
+    color:var(--warning);
+    background:rgba(230,155,24,.1);
+}
+
+.stock-out {
+    color:var(--danger);
+    background:rgba(229,72,77,.1);
+}
+
+/* ================= RECENTLY DELETED ================= */
+
+.deleted-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 22px;
+    border-bottom:1px solid var(--border);
+}
+
+.deleted-item:last-child {
+    border-bottom:0;
+}
+
+.deleted-left {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.deleted-avatar {
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(229,72,77,.1);
+    color:var(--danger);
+    font-weight:700;
+}
+
+.deleted-name {
+    font-weight:650;
+}
+
+.deleted-meta {
+    color:var(--muted);
+    font-size:10px;
+    margin-top:4px;
+}
+
+.deleted-price {
+    text-align:right;
+    font-weight:650;
+}
+
+.empty {
+    text-align:center;
+    padding:45px 20px;
+    color:var(--muted);
+}
+
+/* ================= TOAST ================= */
+
+.toast {
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 17px;
+    border-radius:12px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.3s;
+    z-index:200;
+    font-size:13px;
+}
+
+.toast.show {
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay {
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.modal-overlay.show {
+    display:flex;
+}
+
+.modal {
+    width:min(500px,calc(100% - 30px));
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
+
+.modal-head {
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+}
+
+.modal-head h3 {
+    margin:0;
+}
+
+.modal-body {
+    padding:20px;
+}
+
+.modal-body label {
+    display:block;
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:7px;
+}
+
+.modal-body .field {
+    margin-bottom:15px;
+}
+
+.modal-body input {
+    width:100%;
+    padding:12px;
+    border:1px solid var(--border);
+    background:var(--input);
+    color:var(--text);
+    border-radius:9px;
+    outline:none;
+}
+
+.modal-actions {
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    margin-top:20px;
+}
+
+.secondary-btn {
+    padding:10px 15px;
+    border:1px solid var(--border);
+    background:var(--input);
+    color:var(--text);
+    border-radius:9px;
+}
+.mobile-menu {
+    display:none;
+}
+
+@media(max-width:1050px) {
+
+    .stats {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-area {
+        grid-template-columns:1fr 1fr;
+    }
+
+    .product-analysis {
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:750px) {
+
+    .sidebar {
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform:translateX(0);
+    }
+
+    .main {
+        margin-left:0;
+        width:100%;
+    }
+
+    .mobile-menu {
+        display:block;
+    }
+
+    .topbar {
+        padding:0 16px;
+    }
+
+    .content {
+        padding:18px;
+    }
+
+    .stats {
+        grid-template-columns:1fr;
+    }
+
+    .form-area {
+        grid-template-columns:1fr;
+    }
+
+    .toolbar {
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search {
+        max-width:none;
+    }
+
+    .filters {
+        width:100%;
+    }
+
+    .filters select {
+        flex:1;
+    }
+
+    .desktop-add {
+        display:none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            N
+        </div>
+
+        <div>
+            <div class="brand-name">
+                NimbusCart
+            </div>
+
+            <div class="brand-sub">
+                Admin Console
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        Workspace
+    </div>
+
+    <button
+        class="nav-item active"
+        onclick="showDashboard()"
+        id="dashboardNav"
+    >
+        <span class="nav-icon">▦</span>
+        Dashboard
+    </button>
+
+    <button
+        class="nav-item"
+        onclick="showProducts()"
+        id="productsNav"
+    >
+        <span class="nav-icon">◫</span>
+        Products
+    </button>
+
+    <div class="sidebar-bottom">
+
+        <div class="connection">
+            <span class="online"></span>
+            API Connected
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+    <div style="display:flex;align-items:center;gap:12px;">
+
+        <button
+            class="icon-btn mobile-menu"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div class="page-title">
+
+            <h1 id="pageTitle">
+                Dashboard
+            </h1>
+
+            <p id="pageSubtitle">
+                Product management overview
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            onclick="refreshProducts()"
+            title="Refresh"
+        >
+            ↻
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="toggleTheme()"
+            id="themeButton"
+        >
+            ☾
+        </button>
+
+        <button
+            class="primary-btn desktop-add"
+            onclick="openModal()"
+        >
+            + Add Product
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+<!-- ================= DASHBOARD ================= -->
+
+<div id="dashboardPage">
+
+    <section class="welcome">
+
+        <div class="welcome-badge">
+            ● System Online
+        </div>
+
+        <h2>
+            Welcome to NimbusCart
+        </h2>
+
+        <p>
+            Manage your products and monitor your catalog from one place.
+        </p>
+
+    </section>
+
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">
+                    Total Products
+                </span>
+
+                <div class="stat-icon">
+                    ◫
+                </div>
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalProducts"
+            >
+                0
+            </div>
+
+            <div class="stat-change">
+                Active catalog
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">
+                    Total Stock
+                </span>
+
+                <div class="stat-icon">
+                    ◈
+                </div>
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalStock"
+            >
+                0
+            </div>
+
+            <div class="stat-change">
+                Units available
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">
+                    Catalog Value
+                </span>
+
+                <div class="stat-icon">
+                    ₹
+                </div>
+            </div>
+
+            <div
+                class="stat-value"
+                id="catalogValue"
+            >
+                ₹0
+            </div>
+
+            <div class="stat-change">
+                Inventory value
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">
+                    Low Stock
+                </span>
+
+                <div class="stat-icon">
+                    !
+                </div>
+            </div>
+
+            <div
+                class="stat-value"
+                id="lowStock"
+            >
+                0
+            </div>
+
+            <div class="stat-change">
+                Needs attention
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUICK ADD -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+                <h3>
+                    Quick Add
+                </h3>
+
+                <span>
+                    Add a product directly from the dashboard
+                </span>
+            </div>
+
+        </div>
+
+        <form
+            class="form-area"
+            id="quickForm"
+        >
+
+            <div class="field">
+                <input
+                    id="quickName"
+                    placeholder="Product name"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <input
+                    id="quickPrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="Price"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <input
+                    id="quickStock"
+                    type="number"
+                    min="0"
+                    placeholder="Stock"
+                    required
+                >
+            </div>
+
+            <button class="primary-btn">
+                Add Product
+            </button>
+
+        </form>
+
+    </section>
+
+</div>
+
+
+<!-- ================= PRODUCTS PAGE ================= -->
+
+<div id="productsPage" style="display:none;">
+
+    <!-- FIRST 3 -->
+
+    <section class="product-analysis">
+
+        <!-- TOTAL -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-label">
+                Total Products
+            </div>
+
+            <div
+                class="analysis-value"
+                id="productTotalNumber"
+            >
+                0
+            </div>
+
+            <div class="analysis-meta">
+                Products currently in catalog
+            </div>
+
+        </div>
+
+
+        <!-- HIGHEST -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-label">
+                Highest Amount Product
+            </div>
+
+            <div
+                class="analysis-title"
+                id="highestProductName"
+            >
+                —
+            </div>
+
+            <div
+                class="analysis-value"
+                id="highestProductAmount"
+            >
+                ₹0
+            </div>
+
+            <div
+                class="analysis-meta"
+                id="highestProductUnits"
+            >
+                0 units
+            </div>
+
+        </div>
+
+
+        <!-- LOWEST -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-label">
+                Lowest Amount Product
+            </div>
+
+            <div
+                class="analysis-title"
+                id="lowestProductName"
+            >
+                —
+            </div>
+
+            <div
+                class="analysis-value"
+                id="lowestProductAmount"
+            >
+                ₹0
+            </div>
+
+            <div
+                class="analysis-meta"
+                id="lowestProductUnits"
+            >
+                0 units
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCT TABLE -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Product Catalog
+                </h3>
+
+                <span id="productCount">
+                    0 products
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <div class="search">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    id="searchInput"
+                    placeholder="Search products..."
+                >
+
+            </div>
+
+
+            <div class="filters">
+
+                <select id="stockFilter">
+
+                    <option value="all">
+                        All stock
+                    </option>
+
+                    <option value="good">
+                        In stock
+                    </option>
+
+                    <option value="low">
+                        Low stock
+                    </option>
+
+                    <option value="out">
+                        Out of stock
+                    </option>
+
+                </select>
+
+
+                <select id="sortSelect">
+
+                    <option value="default">
+                        Sort
+                    </option>
+
+                    <option value="name">
+                        Name
+                    </option>
+
+                    <option value="priceLow">
+                        Price: Low
+                    </option>
+
+                    <option value="priceHigh">
+                        Price: High
+                    </option>
+
+                    <option value="stock">
+                        Stock
+                    </option>
+
+                </select>
+
+                <button
+                    class="icon-btn"
+                    onclick="exportCSV()"
+                    title="Export CSV"
+                >
+                    ↓
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Units
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="productTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= RECENTLY DELETED ================= -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Recently Deleted Items
+                </h3>
+
+                <span>
+                    Products removed from the catalog
+                </span>
+
+            </div>
+
+            <span id="deletedCount">
+                0 deleted
+            </span>
+
+        </div>
+
+        <div id="deletedList">
+
+            <div class="empty">
+                No recently deleted products
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- ================= ADD MODAL ================= -->
+
+<div
+    class="modal-overlay"
+    id="modal"
+>
+
+<div class="modal">
+
+    <div class="modal-head">
+
+        <h3>
+            Add New Product
+        </h3>
+
+        <button
+            class="icon-btn"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+        <div class="field">
+
+            <label>
+                Product Name
+            </label>
+
+            <input
+                id="modalName"
+                placeholder="e.g. MacBook Air"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Price
+            </label>
+
+            <input
+                id="modalPrice"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="55000"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Stock Quantity
+            </label>
+
+            <input
+                id="modalStock"
+                type="number"
+                min="0"
+                placeholder="10"
+            >
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="secondary-btn"
+                onclick="closeModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="primary-btn"
+                onclick="addFromModal()"
+            >
+                Add Product
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+    <span id="toastIcon">✓</span>
+
+    <span id="toastMessage">
+        Done
+    </span>
+</div>
+
+
+<script>
+
+const API_URL = "http://localhost:3000";
+
+let products = [];
+
+let deletedProducts = [];
+
+
+// =====================================================
+// THEME
+// =====================================================
+
+function loadTheme() {
+
+    const saved =
+        localStorage.getItem("nimbus-theme");
+
+    if (saved === "dark") {
+
+        document.documentElement
+            .setAttribute("data-theme","dark");
+
+        document.getElementById("themeButton")
+            .textContent = "☀";
+
+    }
+
+}
+
+
+function toggleTheme() {
+
+    const html =
+        document.documentElement;
+
+    const dark =
+        html.getAttribute("data-theme") === "dark";
+
+    if (dark) {
+
+        html.removeAttribute("data-theme");
+
+        localStorage.setItem(
+            "nimbus-theme",
+            "light"
+        );
+
+        document.getElementById("themeButton")
+            .textContent = "☾";
+
+    } else {
+
+        html.setAttribute(
+            "data-theme",
+            "dark"
+        );
+
+        localStorage.setItem(
+            "nimbus-theme",
+            "dark"
+        );
+
+        document.getElementById("themeButton")
+            .textContent = "☀";
+
+    }
+
+}
+
+
+// =====================================================
+// PAGE SWITCHING
+// =====================================================
+
+function showDashboard() {
+
+    document.getElementById("dashboardPage")
+        .style.display = "block";
+
+    document.getElementById("productsPage")
+        .style.display = "none";
+
+    document.getElementById("pageTitle")
+        .textContent = "Dashboard";
+
+    document.getElementById("pageSubtitle")
+        .textContent =
+        "Product management overview";
+
+    document.getElementById("dashboardNav")
+        .classList.add("active");
+
+    document.getElementById("productsNav")
+        .classList.remove("active");
+
+}
+
+
+function showProducts() {
+
+    document.getElementById("dashboardPage")
+        .style.display = "none";
+
+    document.getElementById("productsPage")
+        .style.display = "block";
+
+    document.getElementById("pageTitle")
+        .textContent = "Products";
+
+    document.getElementById("pageSubtitle")
+        .textContent =
+        "Product accounting and catalog management";
+
+    document.getElementById("dashboardNav")
+        .classList.remove("active");
+
+    document.getElementById("productsNav")
+        .classList.add("active");
+
+    updateProductAnalysis();
+
+    renderProducts();
+
+    renderDeletedProducts();
+
+}
+
+
+// =====================================================
+// LOAD PRODUCTS
+// =====================================================
+
+async function loadProducts() {
+
+    try {
+
+        const response =
+            await fetch(`${API_URL}/api/items`);
+
+        if (!response.ok) {
+            throw new Error("API error");
+        }
+
+        products =
+            await response.json();
+
+        updateStats();
+
+        updateProductAnalysis();
+
+        renderProducts();
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Unable to connect to API",
+            true
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// REFRESH
+// =====================================================
+
+async function refreshProducts() {
+
+    await loadProducts();
+
+    showToast(
+        "Products refreshed"
+    );
+
+}
+
+
+// =====================================================
+// DASHBOARD STATS
+// =====================================================
+
+function updateStats() {
+
+    const total =
+        products.length;
+
+    const stock =
+        products.reduce(
+            (sum,p) =>
+                sum + Number(p.stock),
+            0
+        );
+
+    const value =
+        products.reduce(
+            (sum,p) =>
+                sum +
+                Number(p.price) *
+                Number(p.stock),
+            0
+        );
+
+    const low =
+        products.filter(
+            p =>
+                Number(p.stock) > 0 &&
+                Number(p.stock) <= 5
+        ).length;
+
+    document.getElementById(
+        "totalProducts"
+    ).textContent = total;
+
+    document.getElementById(
+        "totalStock"
+    ).textContent =
+        stock.toLocaleString("en-IN");
+
+    document.getElementById(
+        "catalogValue"
+    ).textContent =
+        "₹" +
+        value.toLocaleString(
+            "en-IN",
+            {
+                maximumFractionDigits:0
+            }
+        );
+
+    document.getElementById(
+        "lowStock"
+    ).textContent = low;
+
+}
+
+
+// =====================================================
+// PRODUCT ANALYSIS
+// =====================================================
+
+function updateProductAnalysis() {
+
+    const total =
+        products.length;
+
+    document.getElementById(
+        "productTotalNumber"
+    ).textContent = total;
+
+    if (total === 0) {
+
+        document.getElementById(
+            "highestProductName"
+        ).textContent = "—";
+
+        document.getElementById(
+            "highestProductAmount"
+        ).textContent = "₹0";
+
+        document.getElementById(
+            "highestProductUnits"
+        ).textContent = "0 units";
+
+        document.getElementById(
+            "lowestProductName"
+        ).textContent = "—";
+
+        document.getElementById(
+            "lowestProductAmount"
+        ).textContent = "₹0";
+
+        document.getElementById(
+            "lowestProductUnits"
+        ).textContent = "0 units";
+
+        return;
+
+    }
+
+
+    /*
+       Amount is calculated as:
+
+       PRODUCT PRICE × NUMBER OF UNITS
+    */
+
+    const accounting =
+        products.map(product => {
+
+            const price =
+                Number(product.price);
+
+            const stock =
+                Number(product.stock);
+
+            return {
+                product,
+                amount: price * stock
+            };
+
+        });
+
+
+    // HIGHEST AMOUNT
+
+    const highest =
+        accounting.reduce(
+            (max,item) =>
+                item.amount > max.amount
+                    ? item
+                    : max
+        );
+
+
+    // LOWEST AMOUNT
+
+    const lowest =
+        accounting.reduce(
+            (min,item) =>
+                item.amount < min.amount
+                    ? item
+                    : min
+        );
+
+
+    document.getElementById(
+        "highestProductName"
+    ).textContent =
+        highest.product.name;
+
+    document.getElementById(
+        "highestProductAmount"
+    ).textContent =
+        "₹" +
+        highest.amount.toLocaleString(
+            "en-IN",
+            {
+                maximumFractionDigits:0
+            }
+        );
+
+    document.getElementById(
+        "highestProductUnits"
+    ).textContent =
+        `${highest.product.stock} units × ₹${Number(
+            highest.product.price
+        ).toLocaleString("en-IN")}`;
+
+
+    document.getElementById(
+        "lowestProductName"
+    ).textContent =
+        lowest.product.name;
+
+    document.getElementById(
+        "lowestProductAmount"
+    ).textContent =
+        "₹" +
+        lowest.amount.toLocaleString(
+            "en-IN",
+            {
+                maximumFractionDigits:0
+            }
+        );
+
+    document.getElementById(
+        "lowestProductUnits"
+    ).textContent =
+        `${lowest.product.stock} units × ₹${Number(
+            lowest.product.price
+        ).toLocaleString("en-IN")}`;
+
+}
+
+
+// =====================================================
+// RENDER PRODUCTS
+// =====================================================
+
+function renderProducts() {
+
+    const table =
+        document.getElementById(
+            "productTable"
+        );
+
+    if (!table) return;
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value.toLowerCase();
+
+    const stockFilter =
+        document.getElementById(
+            "stockFilter"
+        ).value;
+
+    const sort =
+        document.getElementById(
+            "sortSelect"
+        ).value;
+
+
+    let list =
+        products.filter(product => {
+
+            const matchesSearch =
+                product.name
+                    .toLowerCase()
+                    .includes(search);
+
+            const stock =
+                Number(product.stock);
+
+            let matchesStock = true;
+
+            if (stockFilter === "good") {
+                matchesStock = stock > 5;
+            }
+
+            if (stockFilter === "low") {
+                matchesStock =
+                    stock > 0 &&
+                    stock <= 5;
+            }
+
+            if (stockFilter === "out") {
+                matchesStock =
+                    stock === 0;
+            }
+
+            return (
+                matchesSearch &&
+                matchesStock
+            );
+
+        });
+
+
+    if (sort === "name") {
+
+        list.sort(
+            (a,b) =>
+                a.name.localeCompare(b.name)
+        );
+
+    }
+
+    if (sort === "priceLow") {
+
+        list.sort(
+            (a,b) =>
+                Number(a.price) -
+                Number(b.price)
+        );
+
+    }
+
+    if (sort === "priceHigh") {
+
+        list.sort(
+            (a,b) =>
+                Number(b.price) -
+                Number(a.price)
+        );
+
+    }
+
+    if (sort === "stock") {
+
+        list.sort(
+            (a,b) =>
+                Number(a.stock) -
+                Number(b.stock)
+        );
+
+    }
+
+
+    table.innerHTML = "";
+
+
+    if (list.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    <div class="empty">
+                        No products found
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.forEach(product => {
+
+        const stock =
+            Number(product.stock);
+
+        const amount =
+            Number(product.price) *
+            stock;
+
+
+        let stockClass =
+            "stock-good";
+
+        let stockText =
+            `${stock} units`;
+
+
+        if (stock === 0) {
+
+            stockClass =
+                "stock-out";
+
+            stockText =
+                "Out of stock";
+
+        }
+
+        else if (stock <= 5) {
+
+            stockClass =
+                "stock-low";
+
+        }
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+
+                <div class="product-cell">
+
+                    <div class="product-avatar">
+                        ${escapeHTML(
+                            product.name
+                                .charAt(0)
+                                .toUpperCase()
+                        )}
+                    </div>
+
+                    <div>
+
+                        <div class="product-title">
+                            ${escapeHTML(product.name)}
+                        </div>
+
+                        <div class="product-id">
+                            Product #${product.id}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <span class="price">
+                    ₹${Number(product.price)
+                        .toLocaleString(
+                            "en-IN",
+                            {
+                                minimumFractionDigits:2
+                            }
+                        )}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="stock-badge ${stockClass}"
+                >
+                    ${stockText}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <strong>
+                    ₹${amount.toLocaleString(
+                        "en-IN",
+                        {
+                            maximumFractionDigits:0
+                        }
+                    )}
+                </strong>
+
+            </td>
+
+
+            <td>
+
+                <button
+                    class="danger-btn"
+                    onclick="deleteProduct(${product.id})"
+                >
+                    Delete
+                </button>
+
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+
+    document.getElementById(
+        "productCount"
+    ).textContent =
+        `${list.length} product${list.length === 1 ? "" : "s"}`;
+
+}
+
+
+// =====================================================
+// DELETE PRODUCT
+// =====================================================
+
+async function deleteProduct(id) {
+
+    const product =
+        products.find(
+            p => Number(p.id) === Number(id)
+        );
+
+    if (!product) return;
+
+
+    const confirmed =
+        confirm(
+            `Delete "${product.name}"?`
+        );
+
+    if (!confirmed) return;
+
+
+    /*
+       BACKEND WILL SUPPORT:
+
+       DELETE /api/items/:id
+
+       We will implement this
+       in the Express server next.
+    */
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/items/${id}`,
+                {
+                    method:"DELETE"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Delete failed"
+            );
+
+        }
+
+
+        /*
+           Keep a local copy for UI.
+           Later the server will permanently
+           store recently deleted products.
+        */
+
+        deletedProducts.unshift({
+
+            ...product,
+
+            deletedAt:
+                new Date().toLocaleString()
+
+        });
+
+
+        products =
+            products.filter(
+                p =>
+                    Number(p.id) !==
+                    Number(id)
+            );
+
+
+        updateStats();
+
+        updateProductAnalysis();
+
+        renderProducts();
+
+        renderDeletedProducts();
+
+
+        showToast(
+            `${product.name} deleted`
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Unable to delete product",
+            true
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// RECENTLY DELETED
+// =====================================================
+
+function renderDeletedProducts() {
+
+    const container =
+        document.getElementById(
+            "deletedList"
+        );
+
+    const count =
+        document.getElementById(
+            "deletedCount"
+        );
+
+
+    count.textContent =
+        `${deletedProducts.length} deleted`;
+
+
+    if (deletedProducts.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+                No recently deleted products
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    deletedProducts.forEach(product => {
+
+        const amount =
+            Number(product.price) *
+            Number(product.stock);
+
+
+        const item =
+            document.createElement("div");
+
+
+        item.className =
+            "deleted-item";
+
+
+        item.innerHTML = `
+
+            <div class="deleted-left">
+
+                <div class="deleted-avatar">
+                    ${escapeHTML(
+                        product.name
+                            .charAt(0)
+                            .toUpperCase()
+                    )}
+                </div>
+
+                <div>
+
+                    <div class="deleted-name">
+                        ${escapeHTML(product.name)}
+                    </div>
+
+                    <div class="deleted-meta">
+
+                        Product #${product.id}
+                        •
+                        ${product.stock} units
+                        •
+                        Deleted ${product.deletedAt}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="deleted-price">
+
+                ₹${amount.toLocaleString(
+                    "en-IN",
+                    {
+                        maximumFractionDigits:0
+                    }
+                )}
+
+            </div>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
+
+}
+
+
+// =====================================================
+// ADD PRODUCT
+// =====================================================
+
+async function addProduct(
+    name,
+    price,
+    stock
+) {
+
+    if (
+        !name ||
+        price < 0 ||
+        stock < 0
+    ) {
+
+        showToast(
+            "Please enter valid product details",
+            true
+        );
+
+        return false;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/items`,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        name,
+                        price,
+                        stock
+                    })
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to add product"
+            );
+
+        }
+
+
+        await loadProducts();
+
+
+        showToast(
+            `${name} added successfully`
+        );
+
+
+        return true;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Unable to add product",
+            true
+        );
+
+        return false;
+
+    }
+
+}
+
+
+// =====================================================
+// QUICK FORM
+// =====================================================
+
+document
+.getElementById("quickForm")
+.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const name =
+            document
+            .getElementById("quickName")
+            .value
+            .trim();
+
+
+        const price =
+            Number(
+                document
+                .getElementById("quickPrice")
+                .value
+            );
+
+
+        const stock =
+            Number(
+                document
+                .getElementById("quickStock")
+                .value
+            );
+
+
+        const success =
+            await addProduct(
+                name,
+                price,
+                stock
+            );
+
+
+        if (success) {
+            event.target.reset();
+        }
+
+    }
+);
+
+
+// =====================================================
+// MODAL
+// =====================================================
+
+function openModal() {
+
+    document
+    .getElementById("modal")
+    .classList
+    .add("show");
+
+}
+
+
+function closeModal() {
+
+    document
+    .getElementById("modal")
+    .classList
+    .remove("show");
+
+}
+
+
+async function addFromModal() {
+
+    const name =
+        document
+        .getElementById("modalName")
+        .value
+        .trim();
+
+
+    const price =
+        Number(
+            document
+            .getElementById("modalPrice")
+            .value
+        );
+
+
+    const stock =
+        Number(
+            document
+            .getElementById("modalStock")
+            .value
+        );
+
+
+    const success =
+        await addProduct(
+            name,
+            price,
+            stock
+        );
+
+
+    if (success) {
+
+        document.getElementById(
+            "modalName"
+        ).value = "";
+
+        document.getElementById(
+            "modalPrice"
+        ).value = "";
+
+        document.getElementById(
+            "modalStock"
+        ).value = "";
+
+        closeModal();
+
+    }
+
+}
+
+
+// =====================================================
+// SEARCH / FILTER / SORT
+// =====================================================
+
+document
+.getElementById("searchInput")
+.addEventListener(
+    "input",
+    renderProducts
+);
+
+
+document
+.getElementById("stockFilter")
+.addEventListener(
+    "change",
+    renderProducts
+);
+
+
+document
+.getElementById("sortSelect")
+.addEventListener(
+    "change",
+    renderProducts
+);
+
+
+// =====================================================
+// EXPORT CSV
+// =====================================================
+
+function exportCSV() {
+
+    if (products.length === 0) {
+
+        showToast(
+            "No products to export",
+            true
+        );
+
+        return;
+
+    }
+
+
+    let csv =
+        "ID,Product,Price,Units,Amount\n";
+
+
+    products.forEach(product => {
+
+        const amount =
+            Number(product.price) *
+            Number(product.stock);
+
+
+        csv +=
+            `${product.id},` +
+            `"${product.name.replace(/"/g,'""')}",` +
+            `${product.price},` +
+            `${product.stock},` +
+            `${amount}\n`;
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "nimbuscart-products.csv";
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+
+    showToast(
+        "CSV exported successfully"
+    );
+
+}
+
+
+// =====================================================
+// TOAST
+// =====================================================
+
+let toastTimer;
+
+
+function showToast(
+    message,
+    error=false
+) {
+
+    const toast =
+        document.getElementById("toast");
+
+
+    document.getElementById(
+        "toastMessage"
+    ).textContent = message;
+
+
+    document.getElementById(
+        "toastIcon"
+    ).textContent =
+        error ? "!" : "✓";
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () =>
+                toast.classList.remove("show"),
+            2800
+        );
+
+}
+
+
+// =====================================================
+// MOBILE SIDEBAR
+// =====================================================
+
+function toggleSidebar() {
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("open");
+
+}
+
+
+// =====================================================
+// SECURITY
+// =====================================================
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+loadTheme();
+
+loadProducts();
+
+</script>
+
+</body>
+</html>
