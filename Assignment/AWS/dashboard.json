@@ -1,0 +1,101 @@
+{
+  "widgets": [{
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "EC2 CPU Utilization",
+        "metrics": [
+          [
+            "AWS/EC2",
+            "CPUUtilization",
+            "InstanceId",
+            "i-0123456789abcdef0"
+          ]
+        ],
+        "period": 300,
+        "stat": "Average",
+        "region": "ap-south-1",
+        "view": "timeSeries",
+        "yAxis": {
+          "left": {
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    },
+
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "EC2 Network Traffic",
+        "metrics": [
+          [
+            "AWS/EC2",
+            "NetworkIn",
+            "InstanceId",
+            "i-0123456789abcdef0"
+          ],
+          [
+            ".",
+            "NetworkOut",
+            ".",
+            "."
+          ]
+        ],
+        "period": 300,
+        "stat": "Average",
+        "region": "ap-south-1",
+        "view": "timeSeries"
+      }
+    },
+
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "EC2 Status Check",
+        "metrics": [
+          [
+            "AWS/EC2",
+            "StatusCheckFailed",
+            "InstanceId",
+            "i-0123456789abcdef0"
+          ]
+        ],
+        "period": 300,
+        "stat": "Maximum",
+        "region": "ap-south-1",
+        "view": "timeSeries"
+      }
+    },
+
+    {
+      "type": "alarm",
+      "x": 12,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "EC2 CloudWatch Alarms",
+        "alarms": [
+          "arn:aws:cloudwatch:ap-south-1:211945238200:alarm:EC2-CPU-High",
+          "arn:aws:cloudwatch:ap-south-1:211945238200:alarm:EC2-Status-Check-Failed",
+          "arn:aws:cloudwatch:ap-south-1:211945238200:alarm:EC2-Network-In-High",
+          "arn:aws:cloudwatch:ap-south-1:211945238200:alarm:EC2-Network-Out-High"
+        ]
+      }
+    }
+
+  ]
+}
